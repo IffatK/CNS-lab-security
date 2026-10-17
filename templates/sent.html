@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% from "_macros.html" import mtable %}
+{% block title %}Sent{% endblock %}
+{% block content %}<section class="card"><h1>Sent messages</h1>
+<form method="get" class="filters" aria-label="Filter sent messages">
+<label>Search metadata <input name="q" value="{{ filters.q }}" maxlength="100" placeholder="UUID or username"></label>
+<label>Sender <input name="sender" value="{{ filters.sender }}" maxlength="32"></label>
+<label>Recipient <input name="recipient" value="{{ filters.recipient }}" maxlength="32"></label>
+<label>Transport <select name="mode"><option value="">Any</option><option value="protected" {% if filters.mode == 'protected' %}selected{% endif %}>Protected</option><option value="plaintext_relay" {% if filters.mode == 'plaintext_relay' %}selected{% endif %}>Plaintext relay</option></select></label>
+<label>From <input type="date" name="date_from" value="{{ filters.date_from }}"></label><label>To <input type="date" name="date_to" value="{{ filters.date_to }}"></label>
+<button class="btn" type="submit">Filter</button><a class="btn secondary" href="{{ url_for('messaging.sent') }}">Clear</a>
+</form>
+{{ mtable(rows, "You have not sent any messages or none match these filters.") }}
+{% if pagination.pages > 1 %}<nav class="pagination" aria-label="Sent message pages">{% if prev_url %}<a href="{{ prev_url }}">← Previous</a>{% endif %}<span>Page {{ pagination.page }} of {{ pagination.pages }}</span>{% if next_url %}<a href="{{ next_url }}">Next →</a>{% endif %}</nav>{% endif %}</section>{% endblock %}

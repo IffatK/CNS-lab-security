@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% from "_macros.html" import badge %}
+{% block title %}Message {{ msg.id }}{% endblock %}
+{% block content %}
+<section class="card"><h1>Message #{{ msg.id }} {{ badge(result.status) }}</h1>
+{% if result.status == 'unprotected' %}<div class="flash warning">This message traveled through a readable relay. Sender authenticity is not guaranteed, and the relay could read or modify its contents.</div>{% endif %}
+{% if current_user.id == msg.recipient_id and msg.relay_report %}<div class="flash {% if msg.protection == 'plaintext_relay_tampered' %}bad{% else %}warning{% endif %}" role="alert"><strong>Attacker relay report</strong><br>This message passed through the relay at IP <code>{{ msg.relay_ip or 'unknown' }}</code>, where its plaintext was exposed. {% if msg.protection == 'plaintext_relay_tampered' %}The relay changed the message. Sender signature verification failed, so the edited content is withheld.{% else %}The original sender signature still verifies; no edit was detected.{% endif %}</div>{% endif %}
+<p>From <b>{{ msg.sender.username }}</b> to <b>{{ msg.recipient.username }}</b> at {{ msg.created_at }}</p>
+{% if result.plaintext is not none %}
+  <h2>Decrypted body</h2><pre class="body">{{ result.plaintext }}</pre>
+{% else %}
+  <div class="flash bad">{% if result.status == 'signature_invalid' %}TAMPERED — NOT VERIFIED. {% endif %}Integrity check failed ({{ result.status }}). Plaintext withheld. A crypto_failure security event was recorded.</div>
+{% endif %}
+<h2>Stored envelope</h2>
+<table><tbody>
+<tr><th>Algorithm</th><td>{{ env.alg }}</td></tr>
+<tr><th>Message UUID</th><td>{{ env.msg_uuid }}</td></tr>
+<tr><th>Nonce (96-bit, b64)</th><td class="mono">{{ env.nonce | b64 }}</td></tr>
+<tr><th>Ciphertext+tag (b64)</th><td class="mono wrap">{{ env.ciphertext | b64 }}</td></tr>
+<tr><th>Ed25519 signature</th><td class="mono wrap">{% if msg.protection == 'plaintext_relay' %}Not verified in unprotected relay mode{% else %}{{ env.signature | b64 }}{% endif %}</td></tr>
+</tbody></table>
+<p><a href="{{ url_for('messaging.inbox') }}">Inbox</a> | <a href="{{ url_for('messaging.sent') }}">Sent</a></p>
+</section>
+{% endblock %}

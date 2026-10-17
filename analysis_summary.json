@@ -1,0 +1,54 @@
+{
+  "source": "docs\\pytest-results-current.xml",
+  "run_timestamp": "2026-10-17T12:24:30.720556+05:30",
+  "test_case_count": 114,
+  "outcomes": {
+    "pass": 113,
+    "skip": 1
+  },
+  "suite_reported_seconds": 108.395,
+  "per_case_duration_seconds": {
+    "sum": 108.113,
+    "mean": 0.948359649122807,
+    "median": 0.908,
+    "sample_sd": 0.7414405629893023,
+    "p95_nearest_rank": 2.145
+  },
+  "module_outcomes": {
+    "tests.test_auth": {
+      "pass": 12
+    },
+    "tests.test_authorization": {
+      "pass": 4
+    },
+    "tests.test_crypto": {
+      "pass": 15
+    },
+    "tests.test_dashboard_metrics": {
+      "pass": 4
+    },
+    "tests.test_messaging": {
+      "pass": 8
+    },
+    "tests.test_migrations": {
+      "pass": 1
+    },
+    "tests.test_security": {
+      "pass": 27,
+      "skip": 1
+    },
+    "tests.test_security_analysis_center": {
+      "pass": 21
+    },
+    "tests.test_transport_lab": {
+      "pass": 14
+    },
+    "tests.test_ui_theme": {
+      "pass": 3
+    },
+    "tests.test_virus_files": {
+      "pass": 4
+    }
+  },
+  "interpretation": "Functional-test evidence only. Per-test durations are harness timings; no endpoint latency, scanner precision/recall, or attack-blocking rate is inferred."
+}

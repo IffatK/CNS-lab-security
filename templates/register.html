@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% from "_macros.html" import field %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<section class="card narrow auth-card"><div class="auth-brand-note">CNS · SECURE COMMUNICATION LAB</div><div class="eyebrow">New account</div><h1>Create your account</h1><p class="auth-description">Your account gets its own signing key for message integrity checks.</p>
+<form id="auth-form" method="post" autocomplete="on">
+  {{ form.hidden_tag() }}
+  {{ field(form.username) }}
+  {{ field(form.password) }}
+  {{ field(form.confirm) }}
+  <p class="hint">Username: 3-32 letters/digits/underscore. Password: at least 10 characters, mixed.</p>
+  <button class="btn" type="submit" data-submit-label="Create account">Create account</button>
+</form>
+<p>Already registered? <a href="{{ url_for('auth.login') }}">Sign in</a></p></section>
+{% endblock %}

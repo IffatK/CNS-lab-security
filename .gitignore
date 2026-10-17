@@ -1,0 +1,99 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+instance/
+*.db
+*.key
+*.pem
+*.pcap
+*.pcapng
+kali/results/
+kali/captures/
+
+
+# ==============================
+# Python
+# ==============================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.python-version
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# ==============================
+# Environment variables & secrets
+# ==============================
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Secret keys and private certificates
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*_private*
+private_key*
+secret_key*
+
+# ==============================
+# Flask & local databases
+# ==============================
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# ==============================
+# Pytest & test artifacts
+# ==============================
+.pytest_cache/
+.pytest-*/
+.pytest*/
+.test-tmp/
+.test-tmp*/
+cns_pytest_temp_run/
+*.cover
+.coverage
+coverage.xml
+htmlcov/
+test-results/
+junit.xml
+pytest-results*.xml
+
+# ==============================
+# Generated logs & temporary files
+# ==============================
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ==============================
+# Generated documentation previews
+# ==============================
+.doc_render/
+.rendered/
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
+

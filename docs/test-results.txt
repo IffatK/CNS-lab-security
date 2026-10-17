@@ -1,0 +1,23 @@
+# Latest local verification record
+# Date: 2026-10-17
+# Environment: Windows 11 (10.0.26200), Python 3.14.7, pytest 9.1.1
+# Flask 3.1.3, Flask-SQLAlchemy 3.1.1, SQLAlchemy 2.1.4, cryptography 50.0.2,
+# ReportLab 4.5.1 (installed from declared requirements after the first run)
+# Command: .venv/Scripts/python.exe -m pytest -q --tb=short
+#           --junitxml=docs/pytest-results-current.xml
+#           --basetemp=docs/pytest-tmp-current
+# Collected: 114 parametrized test cases
+# Result: 113 passed, 1 skipped, 0 failed; JUnit suite time 108.395 s
+# Skipped: POSIX-only key-file permission test (not meaningful on Windows).
+# The initial run had one PDF export failure because ReportLab was absent; after
+# installing ReportLab 4.5.1 from requirements.txt, the dependency-complete run passed.
+#
+# Separate crypto microbenchmark (not pytest): benchmark_crypto.py records 100
+# timings per size/operation/mode for 16, 256, 1024, and 2000-byte messages.
+# Current raw observations are in crypto_benchmark.csv; analysis is in
+# crypto_benchmark_summary.csv and figures/crypto_overhead.pdf. These are local
+# Python function timings, not HTTP or Ubuntu/VM latency measurements.
+#
+# Windows tests do not verify Ubuntu POSIX permissions, live VirtualBox routing,
+# TLS trust on the other VMs, ClamAV behavior/signature freshness, or real-target
+# website scanner accuracy. See reproduction_guide.md for commands and limits.

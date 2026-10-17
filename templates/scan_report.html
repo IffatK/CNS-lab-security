@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Scan report #{{ scan.id }} · NEXUS{% endblock %}
+{% block content %}<section class="card narrow"><div class="eyebrow">Malware scan report</div><h1>Scan #{{ scan.id }}</h1>
+<p><b>Status:</b> {% if scan.status == 'clean' %}<span class="badge ok">CLEAN</span>{% elif scan.status == 'infected' %}<span class="badge bad">INFECTED</span>{% elif scan.status == 'suspicious' %}<span class="badge warning">SUSPICIOUS</span>{% else %}<span class="badge bad">SCAN FAILED</span>{% endif %}</p>
+<dl><dt>Filename</dt><dd>{{ scan.filename }}</dd><dt>Size</dt><dd>{{ scan.size_bytes }} bytes</dd><dt>SHA-256</dt><dd class="mono wrap">{{ scan.sha256 }}</dd><dt>Engine</dt><dd>{{ scan.engine }}</dd><dt>Definitions</dt><dd>{{ scan.definitions }}</dd><dt>Duration</dt><dd>{{ scan.duration_ms }} ms</dd><dt>Detection</dt><dd>{{ scan.detection or 'None' }}</dd><dt>Error</dt><dd>{{ scan.error or 'None' }}</dd><dt>Timestamp (UTC)</dt><dd>{{ scan.created_at }}</dd></dl>
+<p class="hint">CLEAN means ClamAV completed successfully and reported no detection. It is not a guarantee that the file is harmless.</p><a class="btn secondary" href="{{ url_for('virus_scanner.page') }}">Back to scans</a></section>{% endblock %}

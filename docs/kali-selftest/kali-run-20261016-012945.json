@@ -1,0 +1,118 @@
+{
+  "target": "http://127.0.0.1:5000",
+  "time": "2026-10-16 01:29:45",
+  "results": [
+    {
+      "id": "T01",
+      "test": "Connectivity and health",
+      "expected": "200 and status=ok",
+      "observed": "HTTP 200, {'database': 'ok', 'keys': 'ok', 'status': 'ok', 'time': '2026-10-16T01:29:41.977786+00:00', 'version': '1.0.0'}",
+      "result": "PASS",
+      "note": ""
+    },
+    {
+      "id": "T02",
+      "test": "Register and log in 4 test users",
+      "expected": "302 x4 (register) then 302 x4 (login)",
+      "observed": "register=[302, 302, 302, 302] login=[302, 302, 302, 302]",
+      "result": "PASS",
+      "note": ""
+    },
+    {
+      "id": "T03",
+      "test": "Invalid credentials rejected, no user enumeration",
+      "expected": "401 for both, identical message",
+      "observed": "known user=401, unknown user=401, identical message=True",
+      "result": "PASS",
+      "note": ""
+    },
+    {
+      "id": "T04",
+      "test": "Unauthenticated access denied",
+      "expected": "302 (pages) / 401 (API) for every protected path",
+      "observed": "{'/dashboard': 302, '/inbox': 302, '/compose': 302, '/events': 302, '/status': 302, '/api/me': 401, '/api/messages': 401, '/api/messages/1': 401, '/api/messages/1/envelope': 401}",
+      "result": "PASS",
+      "note": ""
+    },
+    {
+      "id": "T05a",
+      "test": "Authenticated send A->B",
+      "expected": "201 with message id",
+      "observed": "HTTP 201 id=3",
+      "result": "PASS",
+      "note": ""
+    },
+    {
+      "id": "T05b",
+      "test": "Authorized parties can read + verify",
+      "expected": "200, verification=verified for sender and recipient",
+      "observed": "{'B(recipient)': (200, 'verified'), 'A(sender)': (200, 'verified')}",
+      "result": "PASS",
+      "note": ""
+    },
+    {
+      "id": "T05c",
+      "test": "IDOR: third user cannot read A->B message",
+      "expected": "404 on API, envelope and HTML; no plaintext",
+      "observed": "{'/api/messages/3': 404, '/api/messages/3/envelope': 404, '/messages/3': 404}, plaintext leaked=False",
+      "result": "PASS",
+      "note": ""
+    },
+    {
+      "id": "T05d",
+      "test": "ID enumeration sweep by third user",
+      "expected": "only 404 for every id (no 200/403 oracle)",
+      "observed": "statuses seen=[404]",
+      "result": "PASS",
+      "note": ""
+    },
+    {
+      "id": "T06",
+      "test": "SQL injection resistance (inputs: login, register, recipient, query, path)",
+      "expected": "no 5xx, no auth bypass, users table intact (legit login still 302)",
+      "observed": "statuses=[401, 401, 401, 401, 401, 401, 401, 401, 400, 404, 400, 404], anomalies=[], legit login after=302",
+      "result": "PASS",
+      "note": "password-field payloads target throwaway user D, which the throttle may lock; legit check uses user A"
+    },
+    {
+      "id": "T07",
+      "test": "CSRF protection",
+      "expected": "400 without token, 400 with forged token, 400 on logout w/o token; session still valid",
+      "observed": "no-token=400, forged=400, logout-no-token=400, still-logged-in=200",
+      "result": "PASS",
+      "note": ""
+    },
+    {
+      "id": "T08",
+      "test": "Session cookie flags and server-side logout invalidation",
+      "expected": "HttpOnly+SameSite present; replaying pre-logout cookie -> 401",
+      "observed": "flags={'HttpOnly': True, 'SameSite': True}, replay status=401",
+      "result": "PASS",
+      "note": "Secure flag intentionally absent: lab uses plain HTTP (see docs/limitations.md)"
+    },
+    {
+      "id": "T09",
+      "test": "Modified ciphertext / signature / metadata rejected (server-side verification)",
+      "expected": "valid=true only for the unmodified envelope",
+      "observed": "{\"unmodified\": true, \"ciphertext bit flip\": false, \"signature bit flip\": false, \"nonce bit flip\": false, \"recipient_id changed\": false, \"created_at changed\": false}",
+      "result": "PASS",
+      "note": ""
+    },
+    {
+      "id": "T10",
+      "test": "Error handling without information leakage",
+      "expected": "404 / 400 / 413, no stack trace in body",
+      "observed": "404-page=404, bad-json=400, oversize=413, traceback_in_body=False",
+      "result": "PASS",
+      "note": "informational: Server header = 'Werkzeug/3.1.7 Python/3.12.3'"
+    },
+    {
+      "id": "T11",
+      "test": "Login throttling",
+      "expected": "401 for the first 5 failures, then 429 with Retry-After",
+      "observed": "codes=[401, 401, 401, 401, 401, 429, 429, 429], first 429 at attempt 6, Retry-After=300",
+      "result": "PASS",
+      "note": ""
+    }
+  ]
+}

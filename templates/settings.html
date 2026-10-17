@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Settings · CNS SecureMail{% endblock %}
+{% block content %}
+<div class="eyebrow">Account preferences</div><h1>Security settings</h1><p class="muted">Choose how your messages are sent over the lab network.</p>
+<section class="card">
+<h2>Message transport protection</h2>
+<p>Protection is controlled by the sender. When enabled, the browser encrypts the message using ElGamal key encapsulation and AES-256-GCM, and the attacker relay cannot inspect or edit it. When disabled, the message enters the readable lab relay even if the recipient has protection enabled. A protected recipient receives the relay IP and a tamper report if the message was changed. If both accounts are unprotected, the recipient receives edited text without a specific tamper notice.</p>
+<form method="post" action="{{ url_for('settings.page') }}">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<label class="toggle-row"><span><b>Enable transport protection</b><br><span class="hint">{% if protection_enabled %}Enabled: messages you send use protected transport and bypass the readable relay.{% else %}Off: messages you send enter the readable lab relay, regardless of the recipient's setting.{% endif %}</span></span><input type="checkbox" name="protection_enabled" {% if protection_enabled %}checked{% endif %} aria-label="Enable transport protection"></label>
+<p class="settings-actions"><button type="submit">Save protection setting</button></p>
+</form>
+</section>
+<section class="card"><h2>How the protection flow works</h2>
+<div class="flow"><div class="flow-step"><b>01 · Browser</b><span>Generates a one-time AES-256 key and encrypts the message using AES-GCM.</span></div><div class="flow-step"><b>02 · ElGamal</b><span>Wraps the AES key with the server's public ElGamal key.</span></div><div class="flow-step"><b>03 · Network</b><span>Only ciphertext and wrapped-key values cross the trusted HTTPS connection.</span></div><div class="flow-step"><b>04 · Server</b><span>Unwraps and authenticates the message, then stores it with the app's existing AES-GCM + Ed25519 envelope.</span></div></div>
+<hr><p class="hint">Open this page and Compose using the same server hostname, port, and protocol. The app reports the active scheme and host in diagnostics.</p>
+<p class="hint">This lab records only activity in this CNS app. It does not collect browsing history from unrelated websites or monitor other applications.</p>
+</section>
+{% endblock %}
